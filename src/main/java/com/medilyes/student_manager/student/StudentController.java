@@ -3,28 +3,32 @@ package com.medilyes.student_manager.student;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-
-
-
 
 @RestController
 @RequestMapping("/api/v1/students")
 public class StudentController {
 
-    @Autowired //dependency injection of the Bean (student service) 
-    private StudentService service;
-    @GetMapping
+    // @Autowired //dependency injection of the Bean (student service)
+    // @Qualifier("DBStudentService")
+    // private StudentService service;
+
+    private final StudentService service;
+
+    public StudentController(@Qualifier("DBStudentService") StudentService service) {
+        this.service = service;
+    }
+
+    @GetMapping()
     public List<Student> getAllStudents() {
         return service.getAllStudents();
     }
@@ -47,12 +51,9 @@ public class StudentController {
         return service.save(s);
     }
 
-    @PutMapping
+    @PutMapping()
     public Student update(@RequestBody Student s) {
         // TODO Auto-generated method stub
         return service.update(s);
     }
-    
-
-
 }

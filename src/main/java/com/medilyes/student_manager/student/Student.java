@@ -1,12 +1,27 @@
 package com.medilyes.student_manager.student;
 
 import java.time.LocalDate;
+import java.time.Period;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
+@Entity
+@Table(name="Student")
 public class Student {
 
+    @Id
+    @GeneratedValue
+    private Integer id;
+
     private String name;
+    @Column(unique = true)
     private String email;
     private LocalDate dateOfBirth;
+    @Transient
     private int age;
 
 
@@ -17,7 +32,15 @@ public class Student {
         this.age = age;
     }
 
-    
+    public Student() {}
+
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return this.name;
@@ -44,7 +67,7 @@ public class Student {
     }
 
     public int getAge() {
-        return this.age;
+        return Period.between(dateOfBirth, LocalDate.now()).getYears();
     }
 
     public void setAge(int age) {
